@@ -45,18 +45,36 @@ public class WriteAction implements Action {
 		vo.setUserNo(user.getNo());
 		
 		
+		
 		if("add".equals(check)) {
 			vo.setG_no(gNo+1);
-			vo.setO_no(0);
+			vo.setO_no(1);
 			vo.setDepth(0);
 		}else if("rewrite".equals(check)) {
 			
 			long writeNo=Long.parseLong(request.getParameter("writeNo"));
 			
 			BoardVo tempVo=(BoardVo)new BoardRepository().findByNo(writeNo);
+			long count =new BoardRepository().findCount(tempVo.getG_no());
+			
+			
+			if(count==1) {
+				
+			}else {
+				long diff = count - tempVo.getO_no(); 
+				long startNo =count+1;
+				
+				
+				for(long i=0;i<diff;i++) {
+					new BoardRepository().orderUpdate(startNo);
+					startNo--;
+				}
+			
+			}
+			
 			vo.setG_no(tempVo.getG_no());
 			vo.setO_no(tempVo.getO_no()+1);
-			vo.setDepth(tempVo.getO_no()+1);
+			vo.setDepth(tempVo.getDepth()+1);
 			
 		}
 		

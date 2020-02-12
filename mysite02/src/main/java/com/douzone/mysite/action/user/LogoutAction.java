@@ -3,6 +3,7 @@ package com.douzone.mysite.action.user;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,6 +27,16 @@ public class LogoutAction implements Action {
 		}
 			
 
+		Cookie[] cookies = request.getCookies();
+		
+		if(cookies !=null) {
+			for(int i=0;i<cookies.length;i++) {
+				cookies[i].setMaxAge(0);
+				
+				response.addCookie(cookies[i]);
+			}
+		}
+		
 		WebUtil.redirect(request.getContextPath(), request, response);
 		return;
 	

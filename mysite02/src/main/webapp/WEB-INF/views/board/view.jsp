@@ -35,7 +35,21 @@
 							</div>
 						</td>
 					</tr>
+						
 				</table>
+				<div class="board-form">		
+					<table class="tbl-ex">
+						<tr>
+							<td>
+								<textarea id="text" name="content"></textarea>
+							</td>
+							<td>
+								<a href="">댓글</a>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
 				<div class="bottom">
 				<c:choose>
 					<c:when test="${user==true }">

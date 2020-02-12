@@ -99,6 +99,44 @@ public boolean update(BoardVo vo) {
 	return result;
 }
 
+public boolean hitUpdate(long no,long nowHit) {
+	
+	boolean result = false;
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	
+	try {
+		conn = getConnection();
+		
+		String sql = "update board set hit=? where no =?";
+		pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setLong(1, nowHit+1);
+		pstmt.setLong(2, no);
+		int count = pstmt.executeUpdate();
+		
+		result = count ==1;
+		
+	}catch (SQLException e) {
+		System.out.println("ERROR:"+e);
+	}finally {
+		//6.자원정리
+		try {
+			if(pstmt !=null) {
+				pstmt.close();
+			}
+			if(conn !=null) {
+				conn.close();
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	return result;
+}
+
+
 public boolean delete(long no) {
 	boolean result = false;
 	Connection conn = null;
@@ -134,7 +172,7 @@ public boolean delete(long no) {
 	
 	return result;
 }
-public List<BoardVo> findAll(){
+public List<BoardVo> findAll(long offset){
 	List<BoardVo> result =new ArrayList<BoardVo>();
 	Connection conn = null;
 	PreparedStatement pstmt = null;
@@ -142,8 +180,12 @@ public List<BoardVo> findAll(){
 	
 	try {
 		conn=getConnection();
-		String sql= "select title,contents,hit,reg_date,g_no,o_no,depth,user_no,no from board order by g_no desc ,o_no asc";
+		String sql= "select r1.title,r1.contents,r1.hit,r1.reg_date,r1.g_no,r1.o_no,r1.depth,r1.user_no,r1.no from( select * from board order by g_no desc,o_no asc) r1 limit 5 offset ?";
 		pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setLong(1, offset);
+		
+		
 		rs = pstmt.executeQuery();
 		
 		//5 결과 가져오기 
@@ -205,7 +247,7 @@ public BoardVo findByNo(long no) {
 	
 	try {
 		conn=getConnection();
-		String sql= "select title,contents,user_no,g_no,o_no,depth from board where no=?";
+		String sql= "select title,contents,user_no,g_no,o_no,depth,hit from board where no=?";
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setLong(1, no);
 		
@@ -221,6 +263,7 @@ public BoardVo findByNo(long no) {
 			long gNo = rs.getLong(4);
 			long oNo = rs.getLong(5);
 			long depth = rs.getLong(6);
+			long hit = rs.getLong(7);
 			
 			
 			result.setTitle(title);
@@ -229,6 +272,7 @@ public BoardVo findByNo(long no) {
 			result.setG_no(gNo);
 			result.setO_no(oNo);
 			result.setDepth(depth);
+			result.setDepth(hit);
 		}
 			
 			
@@ -300,7 +344,49 @@ public long findgNo() {
 	
 	return gNo;
 }
-
+public long findAllCount() {
+	long count = 0 ;
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs=null;
+	
+	try {
+		conn=getConnection();
+		String sql= "select count(*) from board ";
+		pstmt = conn.prepareStatement(sql);
+		
+		rs = pstmt.executeQuery();
+		
+		//5 결과 가져오기 
+		if(rs.next()) {
+				
+			count=rs.getLong(1);
+		}
+			
+			
+	
+	}catch (SQLException e) {
+		System.out.println("ERROR:"+e);
+	}finally {
+		//6.자원정리
+		try {
+			if(rs != null) {
+				rs.close();
+			}			
+			if(pstmt !=null) {
+				pstmt.close();
+			}
+			if(conn !=null) {
+				conn.close();
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	return count;
+}
 public long findMaxDepth(long gNo) {
 	
 	long maxNo = 0 ;
@@ -345,7 +431,50 @@ public long findMaxDepth(long gNo) {
 	
 	return maxNo;
 }
-
+public long findCount(long gNo) {
+	
+	long count = 0 ;
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs=null;
+	
+	try {
+		conn=getConnection();
+		String sql= "select count(*) from board where g_no=?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setLong(1, gNo);
+		rs = pstmt.executeQuery();
+		
+		//5 결과 가져오기 
+		if(rs.next()) {
+				
+			count=rs.getLong(1);
+		}
+			
+			
+	
+	}catch (SQLException e) {
+		System.out.println("ERROR:"+e);
+	}finally {
+		//6.자원정리
+		try {
+			if(rs != null) {
+				rs.close();
+			}			
+			if(pstmt !=null) {
+				pstmt.close();
+			}
+			if(conn !=null) {
+				conn.close();
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	return count;
+}
 public boolean depthUpdate(long nowDepth) {
 	boolean result = false;
 	Connection conn = null;
@@ -382,7 +511,42 @@ public boolean depthUpdate(long nowDepth) {
 	
 	return result;
 }
-
+public boolean orderUpdate(long orderNo) {
+	boolean result = false;
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	
+	try {
+		conn = getConnection();
+		
+		String sql = "update board set o_no = ?  where o_no =?";
+		pstmt = conn.prepareStatement(sql);
+		
+		pstmt.setLong(1, orderNo);
+		pstmt.setLong(2, orderNo-1);
+		
+		int count = pstmt.executeUpdate();
+		
+		result = count ==1;
+		System.out.println("RESULT : "+result);
+	}catch (SQLException e) {
+		System.out.println("ERROR:"+e);
+	}finally {
+		//6.자원정리
+		try {
+			if(pstmt !=null) {
+				pstmt.close();
+			}
+			if(conn !=null) {
+				conn.close();
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	return result;
+}
 
 public boolean allDelete(long gNo) {
 	boolean result = false;

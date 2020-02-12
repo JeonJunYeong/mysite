@@ -29,13 +29,16 @@
 						<th>제목</th>
 						<th>글쓴이</th>
 						<th>조회수</th>
-						<th>작성일</th>
+						<th>작성일<p>
+					
+					</p></th>
 						<th>&nbsp;</th>
 					</tr>
-					<c:set var="listCount" value="${fn:length(list) }"></c:set>
+					<c:set var="listCount" value="${total }"></c:set>
+					
 					<c:forEach items="${list }" var="vo" varStatus="status">
 						<tr>
-							<td>${listCount-status.index }</td>
+							<td>${(listCount-((p-1)*5))-status.index }</td>
 							  <c:choose>
 								<c:when test="${vo.depth==0 }">
 								<td style="text-align:left;">
@@ -64,15 +67,31 @@
 				<div class="pager">
 					<ul>
 						<li><a href="">◀</a></li>
-						<li><a href="">1</a></li>s
+						<li class="selected"><a href="">1</a></li>
 						<li class="selected">2</li>
 						<li><a href="">3</a></li>
 						<li>4</li>
 						<li>5</li>
 						<li><a href="">▶</a></li>
 					</ul>
-				</div>					
+				</div>		
+				<div class="pager">
+					<ul>
+						<li><a href="">◀</a></li>
+						<c:forEach var="i" begin="1" end="5">
+							<c:if test="${p == i } ">
+								<li class="selected"><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${(start*5)+i}">${start+i }</a></li>
+							</c:if>
+							<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${(start*5)+i}">${(start*5)+i }</a></li>
+						</c:forEach>	
+						<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${end+1}">▶</a></li>	
+					</ul>
+					
+				</div>
+							
 				<!-- pager 추가 -->
+				
+				
 				
 				<div class="bottom">
 				 <c:choose>
