@@ -23,7 +23,7 @@ public class ViewFormAction implements Action {
 					
 		long n = Long.parseLong(request.getParameter("n"));
 		
-		
+		request.setAttribute("pNo", Long.parseLong(request.getParameter("p")));
 		
 		BoardVo vo= new BoardRepository().findByNo(n);
 		
@@ -44,7 +44,7 @@ public class ViewFormAction implements Action {
 			request.setAttribute("login", false);
 			getHit(0,n, request, response,vo.getHit());
 		}
-		
+		vo.setNo(n);
 		request.setAttribute("no", n);
 		request.setAttribute("vo", vo);
 		WebUtil.forward("WEB-INF/views/board/view.jsp", request, response);
@@ -57,7 +57,7 @@ public class ViewFormAction implements Action {
 		Cookie[] cookies = request.getCookies();
 		
 		Cookie viewCookie = null;
-		
+		String now = null;
 		for(int i = 0; i< cookies.length; i++){
 			   if(cookies[i].getName().equals("VIEWCOOKIE")){ 
 			    viewCookie = cookies[i];
@@ -77,10 +77,11 @@ public class ViewFormAction implements Action {
 		
 			
 			newCookie = new Cookie("VIEWCOOKIE","|"+no+"|");
-		
+			now=newCookie.getValue();
 			
 			response.addCookie(newCookie);
 			new BoardRepository().hitUpdate(no, hit);
+			return;
 
 		
 		}else {
@@ -94,17 +95,32 @@ public class ViewFormAction implements Action {
 //			new BoardRepository().hitUpdate(no, hit);
 //				}
 //		 
-//			
+//		
 			if(value.indexOf("|"+no+"|")<0) {
 				value = value+"|"+no+"|";
 				viewCookie.setValue(value);
 				response.addCookie(viewCookie);
 				new BoardRepository().hitUpdate(no, hit);
-						
+				return ;
+			}
+			
+			now=value;
+			
+			
+		}
+		System.out.println("VALUE : "+ now);
+		System.out.println("HIT:" +hit);
+		String con_value=now.replace("|", " ");
+		String[] arr=con_value.split(" ");
+		
+		for(int i=0; i<arr.length; i++) {
+			if(arr[i].equals(Long.toString(no))) {
+				return ;
 			}
 		}
 		
 		
+		new BoardRepository().hitUpdate(no, hit);
 	}
 	
 	

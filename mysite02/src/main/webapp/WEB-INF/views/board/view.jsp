@@ -37,18 +37,7 @@
 					</tr>
 						
 				</table>
-				<div class="board-form">		
-					<table class="tbl-ex">
-						<tr>
-							<td>
-								<textarea id="text" name="content"></textarea>
-							</td>
-							<td>
-								<a href="">댓글</a>
-							</td>
-						</tr>
-					</table>
-				</div>
+				
 				
 				<div class="bottom">
 				<c:choose>
@@ -56,18 +45,19 @@
 						<a href="${pageContext.request.contextPath }/board?a=rewrite&n=${no}" id="new-book">답글</a>
 					</c:when>
 				</c:choose>
-					<a href="${pageContext.request.contextPath }/board?a=list">글목록</a>
+					<a href="${pageContext.request.contextPath }/board?a=list&p=${pNo}">글목록</a>
 					<c:choose>
 						<c:when test="${login==true }">
-							<a href="${pageContext.request.contextPath }/board?a=modify&n=${vo.userNo}">글수정</a>
+							<a href="${pageContext.request.contextPath }/board?a=modify&n=${vo.no}">글수정</a>
 						</c:when>
 					</c:choose>
 					
 				</div>
 			</div>
 		</div>
+	
 		<c:import url="/WEB-INF/views/includes/navigation.jsp"/>
 		<c:import url="/WEB-INF/views/includes/footer.jsp"/>
-	</div>
+		</div>
 </body>
 </html>

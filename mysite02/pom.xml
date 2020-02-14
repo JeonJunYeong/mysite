@@ -44,7 +44,7 @@
   
   
   	<build>
-
+		<finalName>mysite02</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<resources>
 			<resource>

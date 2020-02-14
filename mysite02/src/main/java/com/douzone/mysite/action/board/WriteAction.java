@@ -71,7 +71,7 @@ public class WriteAction implements Action {
 				}
 			
 			}
-			
+			System.out.println(tempVo.toString());
 			vo.setG_no(tempVo.getG_no());
 			vo.setO_no(tempVo.getO_no()+1);
 			vo.setDepth(tempVo.getDepth()+1);

@@ -5,10 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 
 import com.douzone.mysite.vo.BoardVo;
@@ -69,7 +67,7 @@ public boolean update(BoardVo vo) {
 	
 	try {
 		conn = getConnection();
-		
+		System.out.println(vo.toString());
 		String sql = "update board set title=?,contents=? where no=?";
 		pstmt = conn.prepareStatement(sql);
 		
@@ -79,7 +77,7 @@ public boolean update(BoardVo vo) {
 		int count = pstmt.executeUpdate();
 		
 		result = count ==1;
-		
+		System.out.println("RESULT:" + result);
 	}catch (SQLException e) {
 		System.out.println("ERROR:"+e);
 	}finally {
@@ -99,6 +97,8 @@ public boolean update(BoardVo vo) {
 	return result;
 }
 
+
+//수정해야함
 public boolean hitUpdate(long no,long nowHit) {
 	
 	boolean result = false;
@@ -116,7 +116,7 @@ public boolean hitUpdate(long no,long nowHit) {
 		int count = pstmt.executeUpdate();
 		
 		result = count ==1;
-		
+		System.out.println("UPDATEQUERY : " +result);
 	}catch (SQLException e) {
 		System.out.println("ERROR:"+e);
 	}finally {
@@ -238,6 +238,82 @@ public List<BoardVo> findAll(long offset){
 	}
 		return result;
 }
+
+public List<BoardVo> findSearchAll(long offset,String option,String kwd){
+	List<BoardVo> result =new ArrayList<BoardVo>();
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs=null;
+	
+	try {
+		System.out.println("KWD:"+kwd);
+		conn=getConnection();
+		String sql;
+		if("title".equals(option)) {
+			sql= "select r1.title,r1.contents,r1.hit,r1.reg_date,r1.g_no,r1.o_no,r1.depth,r1.user_no,r1.no "
+					+ "from( select * from board order by g_no desc,o_no asc) r1 where r1.title like ?  limit 5 offset ?";
+			
+		}else {
+			sql= "select r1.title,r1.contents,r1.hit,r1.reg_date,r1.g_no,r1.o_no,r1.depth,r1.user_no,r1.no "
+					+ "from( select * from board order by g_no desc,o_no asc) r1 where r1.contents like ?  limit 5 offset ?";
+		}
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, "%"+kwd+"%");
+		pstmt.setLong(2, offset);
+		
+		
+		rs = pstmt.executeQuery();
+		
+		//5 결과 가져오기 
+		while(rs.next()) {
+			
+			String title = rs.getString(1);
+			String contents = rs.getString(2);
+			long hit = rs.getLong(3);
+			String date = rs.getString(4);
+			long gNo = rs.getLong(5);
+			long oNo = rs.getLong(6);
+			long depth = rs.getLong(7);
+			long userNo = rs.getLong(8);
+			long no=rs.getLong(9);
+			
+			
+			BoardVo vo = new BoardVo();
+			
+			vo.setTitle(title);
+			vo.setContents(contents);
+			vo.setHit(hit);
+			vo.setReg_date(date);
+			vo.setG_no(gNo);
+			vo.setO_no(oNo);
+			vo.setDepth(depth);
+			vo.setUserNo(userNo);
+			vo.setNo(no);
+			
+			result.add(vo);
+			
+		}
+	
+	}catch (SQLException e) {
+		System.out.println("ERROR:"+e);
+	}finally {
+		//6.자원정리
+		try {
+			if(rs != null) {
+				rs.close();
+			}			
+			if(pstmt !=null) {
+				pstmt.close();
+			}
+			if(conn !=null) {
+				conn.close();
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+		return result;
+}
 public BoardVo findByNo(long no) {
 	
 	BoardVo result =new BoardVo();
@@ -272,7 +348,7 @@ public BoardVo findByNo(long no) {
 			result.setG_no(gNo);
 			result.setO_no(oNo);
 			result.setDepth(depth);
-			result.setDepth(hit);
+			result.setHit(hit);
 		}
 			
 			
@@ -387,24 +463,32 @@ public long findAllCount() {
 	
 	return count;
 }
-public long findMaxDepth(long gNo) {
-	
-	long maxNo = 0 ;
+public long findSearchCount(String option,String kwd) {
+	long count = 0 ;
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs=null;
 	
 	try {
 		conn=getConnection();
-		String sql= "select max(depth) from board where g_no=?";
+		String sql;
+		System.out.println("option :"+option +" kwd : "+kwd);
+		if("title".equals(option)) {
+			sql= "select count(*) from board  where title like ?";
+		}else {
+			sql= "select count(*) from board  where contents like ?";
+		}
+		
 		pstmt = conn.prepareStatement(sql);
-		pstmt.setLong(1, gNo);
+
+		
+		pstmt.setString(1, "%"+kwd+"%");
+	
 		rs = pstmt.executeQuery();
 		
 		//5 결과 가져오기 
 		if(rs.next()) {
-				
-			maxNo=rs.getLong(1);
+			count=rs.getLong(1);
 		}
 			
 			
@@ -429,8 +513,9 @@ public long findMaxDepth(long gNo) {
 	}
 	
 	
-	return maxNo;
+	return count;
 }
+
 public long findCount(long gNo) {
 	
 	long count = 0 ;
@@ -475,42 +560,7 @@ public long findCount(long gNo) {
 	
 	return count;
 }
-public boolean depthUpdate(long nowDepth) {
-	boolean result = false;
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	
-	try {
-		conn = getConnection();
-		
-		String sql = "update board set depth = ?  where depth =?";
-		pstmt = conn.prepareStatement(sql);
-		
-		pstmt.setLong(1, nowDepth-1);
-		pstmt.setLong(1, nowDepth);
-		
-		int count = pstmt.executeUpdate();
-		
-		result = count ==1;
-		
-	}catch (SQLException e) {
-		System.out.println("ERROR:"+e);
-	}finally {
-		//6.자원정리
-		try {
-			if(pstmt !=null) {
-				pstmt.close();
-			}
-			if(conn !=null) {
-				conn.close();
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	return result;
-}
+
 public boolean orderUpdate(long orderNo) {
 	boolean result = false;
 	Connection conn = null;
@@ -548,41 +598,6 @@ public boolean orderUpdate(long orderNo) {
 	return result;
 }
 
-public boolean allDelete(long gNo) {
-	boolean result = false;
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	
-	try {
-		conn = getConnection();
-		
-		String sql = "delete from board where g_no =?";
-		pstmt = conn.prepareStatement(sql);
-		
-		pstmt.setLong(1, gNo);
-		
-		int count = pstmt.executeUpdate();
-		
-		result = count ==1;
-		
-	}catch (SQLException e) {
-		System.out.println("ERROR:"+e);
-	}finally {
-		//6.자원정리
-		try {
-			if(pstmt !=null) {
-				pstmt.close();
-			}
-			if(conn !=null) {
-				conn.close();
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	return result;
-}
 
 private Connection getConnection() throws SQLException{
 		

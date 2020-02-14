@@ -22,11 +22,8 @@ public class LogoutAction implements Action {
 			session.removeAttribute("authUser");
 			session.invalidate();
 			
-			
-			
 		}
 			
-
 		Cookie[] cookies = request.getCookies();
 		
 		if(cookies !=null) {

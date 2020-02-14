@@ -9,6 +9,8 @@ public class BoardFactory  extends ActionFactory{
 	@Override
 	public Action getAction(String actionName) {
 		
+	
+		
 		switch(actionName) {
 			case "list" : return new BoardAction();
 			case "write" : return new WriteFormAction();
@@ -19,6 +21,8 @@ public class BoardFactory  extends ActionFactory{
 			case "rewrite" : return new ReWriteAction();
 			case "rewriteadd" : return new WriteAction();
 			case "delete" : return new DeleteAction();
+			case "deleteform" : return new DeleteFormAction();
+			case "search" : return new BoardAction();
 			default : return new BoardAction();
 		}
 	

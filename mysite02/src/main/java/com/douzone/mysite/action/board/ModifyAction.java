@@ -26,7 +26,6 @@ public class ModifyAction implements Action {
 		vo.setTitle(title);
 		vo.setContents(contents);
 		vo.setNo(no);
-		
 		new BoardRepository().update(vo);
 		WebUtil.redirect(request.getContextPath()+"/board?a=list", request, response);
 	}

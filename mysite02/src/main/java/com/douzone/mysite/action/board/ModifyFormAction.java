@@ -18,9 +18,10 @@ public class ModifyFormAction implements Action{
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		long n = Long.parseLong(request.getParameter("n"));
-		
+		System.out.println("NNNNNN : "+n);
 		BoardVo vo= new BoardRepository().findByNo(n);
 		vo.setNo(n);
+		System.out.println("TTTTT"+vo.toString());
 		request.setAttribute("vo", vo);
 		WebUtil.forward("WEB-INF/views/board/modify.jsp", request, response);
 		
