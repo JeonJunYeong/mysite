@@ -19,8 +19,8 @@
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
-					<input type="hidden" name="a" value="search">
-					<input type="hidden" name="p" value="1">
+					<input type="hidden" name="a" value="list">
+					<input type="hidden" name="p" value="${p }">
 					<input type="hidden" name="searchflag" value="true">
 					<select name ="option">
 						<option value="title">제목</option>
@@ -101,10 +101,10 @@
 					
 						<c:choose>
 							<c:when test="${p<=5 }">
-								<li><a href="${pageContext.servletContext.contextPath }/board?a=${a }&p=1">◀</a></li>
+								<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=1&kwd=${kwd}">◀</a></li>
 							</c:when>
 							<c:otherwise>
-								<li><a href="${pageContext.servletContext.contextPath }/board?a=${a }&p=${end-5}">◀</a></li>
+								<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${end-5}&kwd=${kwd}">◀</a></li>
 							</c:otherwise>
 						</c:choose>
 						
@@ -113,12 +113,12 @@
 									<c:choose>
 										<c:when test="${p == ((start*5)+i) }">
 											<li class="selected">
-												<a href="${pageContext.servletContext.contextPath }/board?a=${a }&p=${(start*5)+i}">${(start*5)+i }</a>
+												<a href="${pageContext.servletContext.contextPath }/board?a=list&p=${(start*5)+i}&kwd=${kwd}">${(start*5)+i }</a>
 											</li>
 										
 										</c:when>
 											<c:otherwise>
-											<li><a href="${pageContext.servletContext.contextPath }/board?a=${a }&p=${(start*5)+i}">${(start*5)+i }</a></li>
+											<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${(start*5)+i}&kwd=${kwd}">${(start*5)+i }</a></li>
 										</c:otherwise>	
 									
 									</c:choose>
@@ -128,10 +128,10 @@
 							
 							<c:choose>
 								<c:when test="${end+5>=next }">
-									<li><a href="${pageContext.servletContext.contextPath }/board?a=${a }&p=${next}">▶</a></li>	
+									<li><a href="${pageContext.servletContext.contextPath }/board?a=listp=${next}&kwd=${kwd}">▶</a></li>	
 								</c:when>
 								<c:otherwise>
-									<li><a href="${pageContext.servletContext.contextPath }/board?a=${a }&p=${end+1}">▶</a></li>	
+									<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${end+1}&kwd=${kwd}">▶</a></li>	
 								</c:otherwise>
 							</c:choose>
 							

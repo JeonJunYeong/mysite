@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,9 +20,10 @@ public class BoardAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		Cookie[] cookies = request.getCookies();
+
 		String option="";
 		String kwd="";
+		String now="";
 		
 		long pNo=1;
 		long start;
@@ -34,36 +34,44 @@ public class BoardAction implements Action {
 			pNo=Long.parseLong(request.getParameter("p"));
 		}
 		
-		
-		if("search".equals(request.getParameter("a"))) {
-			
+		if(request.getParameter("kwd")==null)
+			kwd="";
+		else {
+			kwd=request.getParameter("kwd");
 			option = request.getParameter("option");
-			kwd = request.getParameter("kwd");
-			
-			
-			if(option !=null)
-			request.getSession().setAttribute("option",option );
-			
-			if(kwd !=null)
-			request.getSession().setAttribute("kwd",kwd );
-			
-			request.setAttribute("total", new BoardRepository().findSearchCount((String)request.getSession().getAttribute("option"),(String)request.getSession().getAttribute("kwd")));
-			total=new BoardRepository().findSearchCount((String)request.getSession().getAttribute("option"), (String)request.getSession().getAttribute("kwd"))/5;
-			if(new BoardRepository().findSearchCount(option, kwd)/5!=0) {
-				total=total+1;
-			}
-				
-		}else {
+		}
+		
+		if("".equals(kwd)) {
 			
 			request.setAttribute("total", new BoardRepository().findAllCount());
 			total=new BoardRepository().findAllCount()/5;
 			if(new BoardRepository().findAllCount()/5!=0) {
 				total=total+1;
+			}	
+			
+			request.setAttribute("option","" );
+			request.setAttribute("kwd","" );
+			
+			
+			now="list";
+			
+		}else {
+			long count = new BoardRepository().findSearchCount(option,kwd);
+			request.setAttribute("total", count);
+			total=count/5;
+			if(count%5!=0) {
+				total=total+1;
 			}
+			
+			request.setAttribute("option",option );
+			request.setAttribute("kwd",kwd );
+			
+			
+			now="search";
+			
 		}
 		
-		
-		
+
 		HttpSession session = request.getSession();
 		UserVo vo = null;
 			
@@ -79,7 +87,7 @@ public class BoardAction implements Action {
 		
 		
 		
-		List<BoardVo> list = Paging(pNo,request,request.getParameter("a"));
+		List<BoardVo> list = Paging(pNo,request,now);
 		
 		
 		if((pNo%5)==0) {
@@ -92,7 +100,7 @@ public class BoardAction implements Action {
 			start=total;
 		}
 		
-	
+		
 		
 		request.setAttribute("start", start);
 		request.setAttribute("end", (start+1)*5);
