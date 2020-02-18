@@ -104,7 +104,7 @@
 								<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=1&kwd=${kwd}">◀</a></li>
 							</c:when>
 							<c:otherwise>
-								<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${end-5}&kwd=${kwd}">◀</a></li>
+								<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${((start-1)*5)+1}&kwd=${kwd}">◀</a></li>
 							</c:otherwise>
 						</c:choose>
 						
@@ -128,10 +128,10 @@
 							
 							<c:choose>
 								<c:when test="${end+5>=next }">
-									<li><a href="${pageContext.servletContext.contextPath }/board?a=listp=${next}&kwd=${kwd}">▶</a></li>	
+									<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${next}&kwd=${kwd}">▶</a></li>	
 								</c:when>
 								<c:otherwise>
-									<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${end+1}&kwd=${kwd}">▶</a></li>	
+									<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${((start+1)*5)+1}&kwd=${kwd}">▶</a></li>	
 								</c:otherwise>
 							</c:choose>
 							

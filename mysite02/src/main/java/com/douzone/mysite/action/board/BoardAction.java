@@ -39,6 +39,7 @@ public class BoardAction implements Action {
 		else {
 			kwd=request.getParameter("kwd");
 			option = request.getParameter("option");
+			
 		}
 		
 		if("".equals(kwd)) {
@@ -49,7 +50,6 @@ public class BoardAction implements Action {
 				total=total+1;
 			}	
 			
-			request.setAttribute("option","" );
 			request.setAttribute("kwd","" );
 			
 			
@@ -63,7 +63,7 @@ public class BoardAction implements Action {
 				total=total+1;
 			}
 			
-			request.setAttribute("option",option );
+			
 			request.setAttribute("kwd",kwd );
 			
 			
@@ -101,17 +101,15 @@ public class BoardAction implements Action {
 		}
 		
 		
-		
 		request.setAttribute("start", start);
 		request.setAttribute("end", (start+1)*5);
-		//request.setAttribute("p", pNo);
+		request.setAttribute("p", pNo);
 		request.setAttribute("list", list);
 		WebUtil.forward("/WEB-INF/views/board/list.jsp", request, response);
 		
 	}
 
 	public List<BoardVo> Paging(long pageNum,HttpServletRequest request,String a) {
-		HttpSession session = request.getSession();
 		long offset = (pageNum-1)*5;
 		String option;
 		String kwd;
@@ -121,9 +119,9 @@ public class BoardAction implements Action {
 			request.setAttribute("a", "list");
 		}else {
 			
-			option = (String)session.getAttribute("option");
-			kwd = (String)session.getAttribute("kwd");
-			
+			option = request.getParameter("option");
+			kwd = request.getParameter("kwd");
+			System.out.println("OPTION : "+option+", KWD : "+kwd);
 			list = new BoardRepository().findSearchAll(offset,option,kwd);
 			request.setAttribute("a", "search");
 		}
