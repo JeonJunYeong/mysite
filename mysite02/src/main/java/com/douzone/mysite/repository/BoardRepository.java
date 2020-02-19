@@ -180,7 +180,7 @@ public List<BoardVo> findAll(long offset){
 	
 	try {
 		conn=getConnection();
-		String sql= "select r1.title,r1.contents,r1.hit,r1.reg_date,r1.g_no,r1.o_no,r1.depth,r1.user_no,r1.no from( select * from board order by g_no desc,o_no asc) r1 limit 5 offset ?";
+		String sql= "select r1.title,r1.contents,r1.hit,r1.reg_date,r1.g_no,r1.o_no,r1.depth,r1.user_no,r1.no from board r1 order by g_no desc,o_no asc limit 5 offset ?";
 		pstmt = conn.prepareStatement(sql);
 		
 		pstmt.setLong(1, offset);
@@ -251,11 +251,11 @@ public List<BoardVo> findSearchAll(long offset,String option,String kwd){
 		String sql;
 		if("title".equals(option)) {
 			sql= "select r1.title,r1.contents,r1.hit,r1.reg_date,r1.g_no,r1.o_no,r1.depth,r1.user_no,r1.no "
-					+ "from( select * from board order by g_no desc,o_no asc) r1 where r1.title like ?  limit 5 offset ?";
+					+ "from board r1 where r1.title like ? order by g_no desc,o_no asc limit 5 offset ?";
 			
 		}else {
 			sql= "select r1.title,r1.contents,r1.hit,r1.reg_date,r1.g_no,r1.o_no,r1.depth,r1.user_no,r1.no "
-					+ "from( select * from board order by g_no desc,o_no asc) r1 where r1.contents like ?  limit 5 offset ?";
+					+ "from board r1 where r1.contents like ? order by g_no desc,o_no asc limit 5 offset ?";
 		}
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, "%"+kwd+"%");

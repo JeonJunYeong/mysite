@@ -89,7 +89,7 @@ public class BoardAction implements Action {
 		
 		List<BoardVo> list = Paging(pNo,request,now);
 		
-		
+
 		if((pNo%5)==0) {
 			start= (pNo/5)-1;
 		}else {
