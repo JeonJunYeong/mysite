@@ -56,7 +56,7 @@
 								</c:when>
 								<c:otherwise>
 									<td style="text-align:left; padding-left:${vo.depth*20}px"><img src='/mysite02/assets/images/reply.png'>
-									<a href="${pageContext.servletContext.contextPath }/board?a=view&n=${vo.no}&p=${p}">${vo.title }</a>
+									<a href="${pageContext.servletContext.contextPath }/board?a=view&n=${vo.no}&p=${p}">[답글]${vo.title }</a>
 									</td>
 								</c:otherwise>
 								
