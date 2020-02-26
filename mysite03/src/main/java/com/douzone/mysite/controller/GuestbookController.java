@@ -55,7 +55,6 @@ public class GuestbookController {
 		
 		boolean result = guestbookService.delete(no, password);
 		
-		System.out.println("RESULT : "+result);
 		if(result) {
 			return "redirect:/guestbook/list";
 		}else {

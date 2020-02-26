@@ -1,6 +1,5 @@
 package com.douzone.mysite.vo;
 
-
 public class BoardVo {
 
 	private long no;
@@ -12,8 +11,15 @@ public class BoardVo {
 	private long o_no;
 	private long depth;
 	private long userNo;
+	private String userName;
 	
 	
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 	public long getNo() {
 		return no;
 	}
@@ -74,7 +80,7 @@ public class BoardVo {
 	@Override
 	public String toString() {
 		return "BoardVo [no=" + no + ", title=" + title + ", contents=" + contents + ", hit=" + hit + ", reg_date="
-				+ reg_date + ", g_no=" + g_no + ", o_no=" + o_no + ", depth=" + depth + ", user_no=" +userNo + "]";
+				+ reg_date + ", g_no=" + g_no + ", o_no=" + o_no + ", depth=" + depth + ", user_no=" +userNo + "userName"+userName+"]";
 	}
 	
 	

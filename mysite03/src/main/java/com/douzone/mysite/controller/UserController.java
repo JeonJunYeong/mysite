@@ -86,7 +86,6 @@ public class UserController {
 		Long no= authUser.getNo();
 		UserVo vo = userService.getUser(no);
 		
-		System.out.println("NO :"+ no);
 		model.addAttribute("userVo",vo);
 		return "user/update";
 	}
@@ -99,8 +98,7 @@ public class UserController {
 			return "redirect:/";
 		}
 		
-		
-		return "user/update";
+		return "redirect:/user/update";
 	}
 	@ExceptionHandler(Exception.class)
 	public String handelException() {

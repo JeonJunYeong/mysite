@@ -67,7 +67,7 @@ public boolean update(BoardVo vo) {
 	
 	try {
 		conn = getConnection();
-		System.out.println(vo.toString());
+		
 		String sql = "update board set title=?,contents=? where no=?";
 		pstmt = conn.prepareStatement(sql);
 		
@@ -77,7 +77,7 @@ public boolean update(BoardVo vo) {
 		int count = pstmt.executeUpdate();
 		
 		result = count ==1;
-		System.out.println("RESULT:" + result);
+		
 	}catch (SQLException e) {
 		System.out.println("ERROR:"+e);
 	}finally {

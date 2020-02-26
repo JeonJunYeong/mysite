@@ -18,16 +18,13 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
-					<input type="hidden" name="a" value="list">
-					<input type="hidden" name="p" value="${p }">
-					<input type="hidden" name="searchflag" value="true">
+				<form id="search_form" action="${pageContext.request.contextPath }/board/list?p=${page}" method="post">
 					<select name ="option">
 						<option value="title">제목</option>
 						<option value="contents">내용</option>
 						<!--<option value="user">글쓴이</option>-->
 					</select>
-					<input type="text" id="kwd" name="kwd" value="">
+					<input type="text" id="kwd" name="kwd" value="${map.kwd }">
 					<input type="submit" value="찾기">
 				</form>
 				
@@ -43,30 +40,30 @@
 					</p></th>
 						<th>&nbsp;</th>
 					</tr>
-					<c:set var="listCount" value="${total }"></c:set>
+					<c:set var="listCount" value="${map.total }"></c:set>
 					
-					<c:forEach items="${list }" var="vo" varStatus="status">
+					<c:forEach items="${map.list }" var="vo" varStatus="status">
 						<tr>
-							<td>${(listCount-((p-1)*5))-status.index }</td>
+							<td>${(listCount-((map.page-1)*5))-status.index }</td>
 							  <c:choose>
 								<c:when test="${vo.depth==0 }">
 								<td style="text-align:left;">
-								<a href="${pageContext.servletContext.contextPath }/board?a=view&n=${vo.no}&p=${p}">${vo.title }</a>
+								<a href="${pageContext.servletContext.contextPath }/board/view?n=${vo.no}&p=${map.page}">${vo.title }</a>
 								</td>
 								</c:when>
 								<c:otherwise>
 									<td style="text-align:left; padding-left:${vo.depth*20}px"><img src='/mysite02/assets/images/reply.png'>
-									<a href="${pageContext.servletContext.contextPath }/board?a=view&n=${vo.no}&p=${p}">[답글]${vo.title }</a>
+									<a href="${pageContext.servletContext.contextPath }/board/view?n=${vo.no}&p=${map.page}">[답글]${vo.title }</a>
 									</td>
 								</c:otherwise>
 								
 							</c:choose> 
 							
-							<td>${vo.userNo }</td>
+							<td>${vo.userName }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.reg_date }</td>
 							
-								<td><a href="${pageContext.servletContext.contextPath }/board?a=deleteform&n=${vo.no}" class="del">삭제</a></td>
+								<td><a href="${pageContext.servletContext.contextPath }/board/deleteform?n=${vo.no}" class="del">삭제</a></td>
 							
 						</tr>
 					
@@ -78,62 +75,25 @@
 				
 				<div class="pager">
 					<ul>
-						<c:choose>
-							<c:when test="${total%5==0 }">
+						
+						<li><a href="${pageContext.servletContext.contextPath }/board/list?p=${map.prevPage}&kwd=${map.kwd}">◀</a></li>
 								
-								<fmt:parseNumber var="next" integerOnly="true" value="${total/5 }"/>
-							</c:when>
-							<c:otherwise>
-								<fmt:parseNumber var="next" integerOnly="true" value="${total/5+1 }"/>
-							</c:otherwise>
-						</c:choose>
-						
-						<c:choose>
-							<c:when test="${next-(start*5)<5 }">
-								<c:set var="end" value="${next-(start*5) }"/>
-							</c:when>
-							<c:otherwise>
-								<c:set var="end" value="5"/>
-							</c:otherwise>
-						</c:choose>
-						
-					
-					
-						<c:choose>
-							<c:when test="${p<=5 }">
-								<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=1&kwd=${kwd}">◀</a></li>
-							</c:when>
-							<c:otherwise>
-								<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${((start-1)*5)+1}&kwd=${kwd}">◀</a></li>
-							</c:otherwise>
-						</c:choose>
-						
-						
-								<c:forEach var="i" begin="1" end="${end }">
-									<c:choose>
-										<c:when test="${p == ((start*5)+i) }">
-											<li class="selected">
-												<a href="${pageContext.servletContext.contextPath }/board?a=list&p=${(start*5)+i}&kwd=${kwd}">${(start*5)+i }</a>
-											</li>
-										
-										</c:when>
-											<c:otherwise>
-											<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${(start*5)+i}&kwd=${kwd}">${(start*5)+i }</a></li>
-										</c:otherwise>	
-									
-									</c:choose>
+							<c:forEach var="i" begin="1" end="${map.listsize }">
+								<c:choose>
+									<c:when test="${map.page == (map.beginPage+(i-1)) }">
+										<li class ="selected">
+											<a href="${pageContext.servletContext.contextPath }/board/list?p=${map.beginPage+(i-1) }&kwd=${map.kwd}">${map.beginPage+(i-1) }</a>
+										</li>
+									</c:when>
+									<c:otherwise>
+										<li><a href="${pageContext.servletContext.contextPath }/board/list?p=${map.beginPage+(i-1) }&kwd=${map.kwd}">${map.beginPage+(i-1) }</a></li>
+									</c:otherwise>
 								
-								
-								</c:forEach>
+								</c:choose>
+							</c:forEach>
 							
-							<c:choose>
-								<c:when test="${end+5>=next }">
-									<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${next}&kwd=${kwd}">▶</a></li>	
-								</c:when>
-								<c:otherwise>
-									<li><a href="${pageContext.servletContext.contextPath }/board?a=list&p=${((start+1)*5)+1}&kwd=${kwd}">▶</a></li>	
-								</c:otherwise>
-							</c:choose>
+						<li><a href="${pageContext.servletContext.contextPath }/board/list?p=${map.nextPage }&kwd=${map.kwd}">▶</a></li>	
+							
 							
 					</ul>
 				</div>
@@ -143,7 +103,7 @@
 				<div class="bottom">
 				 <c:choose>
 				 	<c:when test="${login==true }">
-				 		<a href="${pageContext.request.contextPath }/board?a=write" id="new-book">글쓰기</a>
+				 		<a href="${pageContext.request.contextPath }/board/write" id="new-book">글쓰기</a>
 				 	</c:when>
 				 </c:choose>
 					

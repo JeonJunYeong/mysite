@@ -41,14 +41,14 @@
 				
 				<div class="bottom">
 				<c:choose>
-					<c:when test="${user==true }">
-						<a href="${pageContext.request.contextPath }/board?a=rewrite&n=${no}" id="new-book">답글</a>
+					<c:when test="${login==true }">
+						<a href="${pageContext.request.contextPath }/board/reply?n=${vo.no}&p=${page}" id="new-book">답글</a>
 					</c:when>
 				</c:choose>
-					<a href="${pageContext.request.contextPath }/board?a=list&p=${pNo}">글목록</a>
+					<a href="${pageContext.request.contextPath }/board/list?p=${page}">글목록</a>
 					<c:choose>
-						<c:when test="${login==true }">
-							<a href="${pageContext.request.contextPath }/board?a=modify&n=${vo.no}">글수정</a>
+						<c:when test="${user==true }">
+							<a href="${pageContext.request.contextPath }/board/modify?n=${vo.no}&p=${page}">글수정</a>
 						</c:when>
 					</c:choose>
 					

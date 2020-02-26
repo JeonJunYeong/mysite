@@ -27,13 +27,10 @@ public class UserRepository {
 				
 	}
 
-	public boolean update(UserVo vo) {
+	public int update(UserVo vo) {
 	
 		
-		int count = sqlSession.insert("user.update",vo);
-		boolean result = count == 1;
-		
-		return result;
+		return sqlSession.update("user.update",vo);
 		
 	}
 
@@ -62,7 +59,8 @@ public class UserRepository {
 		
 	
 	return userVo;
-}
-
+	}
+	
+	
 
 }
