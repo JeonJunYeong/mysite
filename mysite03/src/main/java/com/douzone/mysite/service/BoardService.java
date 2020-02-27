@@ -24,18 +24,12 @@ public class BoardService {
 	public Map<String,Object> find(int currentPage,String keyword,String option){
 		
 		int offset=(currentPage-1)*5;
-		int pageCnt;
 		int total = boardRepository.totalCount(option,keyword);
 		
-		if(total%LIST_SIZE!=0) {
-			pageCnt=(total/LIST_SIZE)+1;
-		}else
-			pageCnt=(total/LIST_SIZE);
 		
+		int pageCnt=(total%LIST_SIZE!=0) ? (total/LIST_SIZE)+1 :  (total/LIST_SIZE);
 		int calCnt=(currentPage%5)==0 ? currentPage-1 : currentPage;
-		
-		
-		
+	
 		int beginPage=calCnt-(calCnt%5)==0 ? 1 : calCnt-(calCnt%5)+1;
 		int prevPage = beginPage == 1 ? 1 : beginPage -1;
 		int endPage = (pageCnt-(pageCnt%5))==(calCnt-(calCnt%5)) ? pageCnt : (beginPage+PAGE_SIZE)-1;
@@ -52,8 +46,7 @@ public class BoardService {
 		
 		Map<String,Object> map = new HashMap<>();
 		
-		System.out.println("ENDPAGE : "+endPage+", nextpage:"+nextPage);
-		
+		System.out.println("KEYWORD : "+keyword);
 		
 		map.put("list", list);
 		map.put("beginPage",beginPage);

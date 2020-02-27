@@ -48,12 +48,12 @@
 							  <c:choose>
 								<c:when test="${vo.depth==0 }">
 								<td style="text-align:left;">
-								<a href="${pageContext.servletContext.contextPath }/board/view?n=${vo.no}&p=${map.page}">${vo.title }</a>
+								<a href="${pageContext.servletContext.contextPath }/board/view?n=${vo.no}&p=${map.page}&kwd=${map.kwd }">${vo.title }</a>
 								</td>
 								</c:when>
 								<c:otherwise>
 									<td style="text-align:left; padding-left:${vo.depth*20}px"><img src='/mysite02/assets/images/reply.png'>
-									<a href="${pageContext.servletContext.contextPath }/board/view?n=${vo.no}&p=${map.page}">[답글]${vo.title }</a>
+									<a href="${pageContext.servletContext.contextPath }/board/view?n=${vo.no}&p=${map.page}&kwd=${map.kwd }">[답글]${vo.title }</a>
 									</td>
 								</c:otherwise>
 								
@@ -62,9 +62,14 @@
 							<td>${vo.userName }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.reg_date }</td>
-							
-								<td><a href="${pageContext.servletContext.contextPath }/board/deleteform?n=${vo.no}" class="del">삭제</a></td>
-							
+								<c:choose>
+									<c:when test="${not empty authUser && authUser.no == vo.userNo }">
+										<a href="${pageContext.request.contextPath }/board/delete/${vo.no }?p=${map.currentPage }&kwd=${map.keyword }" class="del">삭제</a>
+									</c:when>
+									<c:otherwise>
+										&nbsp;
+									</c:otherwise>
+								</c:choose>
 						</tr>
 					
 					</c:forEach>
@@ -102,7 +107,7 @@
 				
 				<div class="bottom">
 				 <c:choose>
-				 	<c:when test="${login==true }">
+				 	<c:when test="${not empty authUser }">
 				 		<a href="${pageContext.request.contextPath }/board/write" id="new-book">글쓰기</a>
 				 	</c:when>
 				 </c:choose>

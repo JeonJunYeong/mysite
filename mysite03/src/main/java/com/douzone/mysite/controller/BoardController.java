@@ -7,7 +7,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +29,10 @@ public class BoardController {
 					@RequestParam( value="kwd", required=true, defaultValue="") String keyword,
 					@RequestParam( value="option" ,required=true, defaultValue ="title")String option,
 					Model model,HttpSession session) {
+		
+		
+		System.out.println("keyword:"+keyword);
+		
 		
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser==null) {
@@ -146,11 +149,11 @@ public class BoardController {
 			vo.setUserNo(authUser.getNo());
 			boardService.replyinsert(vo);
 		}
-		
-		
-		return "redirect:/board/list?p="+page;
 	
+		return "redirect:/board/list?p="+page;
 	}
+	
+	
 	
 	
 }
