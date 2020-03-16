@@ -29,10 +29,7 @@ public class BoardController {
 					@RequestParam( value="kwd", required=true, defaultValue="") String keyword,
 					@RequestParam( value="option" ,required=true, defaultValue ="title")String option,
 					Model model,HttpSession session) {
-		
-		
-		System.out.println("keyword:"+keyword);
-		
+	
 		
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser==null) {
