@@ -21,7 +21,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
-	
+		
 		
 		UserVo vo = new UserVo();
 		vo.setEmail(email);

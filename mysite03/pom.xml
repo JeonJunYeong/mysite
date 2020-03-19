@@ -30,7 +30,6 @@
 			<version>1.4</version>
 		</dependency>
 		
-		
  		<!-- common fileupload -->
 			<dependency>
 				<groupId>commons-fileupload</groupId>
@@ -43,7 +42,7 @@
 				<artifactId>commons-io</artifactId>
 				<version>1.4</version>
 			</dependency>
-	
+		
 		<!-- MariaDB JDBC Driver -->
 		<dependency>
 		    <groupId>org.mariadb.jdbc</groupId>
@@ -71,8 +70,6 @@
 				  <artifactId>commons-logging</artifactId>
 			   </exclusion>
 			</exclusions>
-			
-			
 		</dependency>
 	
 		<!-- Spring Web -->
@@ -133,8 +130,6 @@
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
 		</dependency>
-		
-		
 	</dependencies>
 	
   	<build>

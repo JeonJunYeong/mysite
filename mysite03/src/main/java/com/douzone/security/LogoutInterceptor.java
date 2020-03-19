@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.douzone.mysite.vo.UserVo;
+
 public class LogoutInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
@@ -13,10 +15,15 @@ public class LogoutInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		
 		HttpSession session = request.getSession();
+		UserVo vo = (UserVo)session.getAttribute("authUser");
+		
+		if(vo ==null) {
+			
+		}
 		
 		session.removeAttribute("authUser");
 		session.invalidate();
-		response.sendRedirect(request.getContextPath());
+		response.sendRedirect(request.getContextPath()+"/");
 			
 		return false;
 	}

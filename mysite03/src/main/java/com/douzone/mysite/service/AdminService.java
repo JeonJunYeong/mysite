@@ -36,12 +36,7 @@ public class AdminService {
 			String extName = originFilename.substring(lastIdx+1);
 			
 			String saveFilename = generateSaveFilename(extName);
-			long fileSize = multipartFile.getSize();
-			
-			System.out.println("#############"+originFilename);
-			System.out.println("#############"+saveFilename);
-			System.out.println("#############"+fileSize);
-			
+		
 			byte[] fileDate = multipartFile.getBytes();
 			OutputStream os = new FileOutputStream(SAVE_PATH+"/"+saveFilename);
 			os.write(fileDate);

@@ -12,8 +12,6 @@ import com.douzone.mysite.vo.SiteVo;
 @Controller
 public class MainController {
 
-	
-	
 	@Autowired
 	private AdminService adminService;
 	
@@ -22,7 +20,6 @@ public class MainController {
 		
 		SiteVo now = adminService.find();
 		model.addAttribute("siteVo",now);
-		
 		
 		return "main/index";
 	}
