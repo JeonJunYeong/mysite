@@ -11,5 +11,6 @@
   	<module>mysite03</module>
   	<module>mysite04</module>
   	<module>mysiteTest</module>
+  	<module>mysite05</module>
   </modules>
 </project>
