@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.douzone.mysite.service.AdminService;
 import com.douzone.mysite.service.BoardService;
 import com.douzone.mysite.vo.BoardVo;
+import com.douzone.mysite.vo.SiteVo;
 import com.douzone.mysite.vo.UserVo;
 
 @Controller
@@ -23,6 +25,8 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
+	@Autowired
+	private AdminService adminService;
 	
 	@RequestMapping("/list")
 	public String index(@RequestParam(value="p",required = true,defaultValue = "1") Integer page,
@@ -40,6 +44,9 @@ public class BoardController {
 		}
 		
 		Map<String,Object> map  = boardService.find(page,keyword,option);
+		
+		SiteVo now = adminService.find();
+		model.addAttribute("siteVo",now);
 		
 		model.addAttribute("map",map);
 		return "board/list";
@@ -67,6 +74,8 @@ public class BoardController {
 			model.addAttribute("user",userResult);
 		}
 		
+		SiteVo now = adminService.find();
+		model.addAttribute("siteVo",now);
 		
 		model.addAttribute("page",page); //돌아가기 위한 페이지 
 		model.addAttribute("vo",vo); // 내용 출력 위함 
@@ -107,6 +116,10 @@ public class BoardController {
 		model.addAttribute("vo",vo); // 내용 출력 위함 
 		model.addAttribute("n",no);
 		model.addAttribute("p",page);
+		
+		SiteVo now = adminService.find();
+		model.addAttribute("siteVo",now);
+		
 		return "board/modify";
 	}
 	
@@ -131,6 +144,10 @@ public class BoardController {
 		model.addAttribute("n",no);
 		model.addAttribute("p",page);
 		model.addAttribute("nowState","reply");	
+		
+		SiteVo now = adminService.find();
+		model.addAttribute("siteVo",now);
+		
 		return "/board/write";
 	}
 	

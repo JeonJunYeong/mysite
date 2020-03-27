@@ -16,7 +16,9 @@
 </head>
 <body>
 	<div id="container">
-		<c:import url="/WEB-INF/views/includes/header.jsp"/>
+		<c:import url="/WEB-INF/views/includes/header.jsp">
+			<c:param name="title" value="${siteVo.title }"></c:param>
+		</c:import>
 		<div id="content">
 			<div id="board" class="board-form">
 				<table class="tbl-ex">

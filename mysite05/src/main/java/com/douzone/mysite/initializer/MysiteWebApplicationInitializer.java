@@ -11,7 +11,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import com.douzone.mysite.config.AppConfig;
 import com.douzone.mysite.config.WebConfig;
 
-public class MySiteWebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class MysiteWebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {

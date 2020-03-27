@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.douzone.mysite.service.AdminService;
 import com.douzone.mysite.service.GuestbookService;
 import com.douzone.mysite.vo.GuestbookVo;
+import com.douzone.mysite.vo.SiteVo;
 
 
 @Controller
@@ -24,9 +26,14 @@ public class GuestbookController {
 	@Autowired
 	private GuestbookService guestbookService;
 	
+	@Autowired
+	private AdminService adminService;
 	
 	@RequestMapping("/list")
 	public String index(Model model) {
+		
+		SiteVo now = adminService.find();
+		model.addAttribute("siteVo",now);
 		
 		List<GuestbookVo> list = guestbookService.findAll();
 		model.addAttribute("list",list);
@@ -45,6 +52,10 @@ public class GuestbookController {
 	@RequestMapping(value="/delete/{n}",method = RequestMethod.GET)
 	public String delete(@PathVariable("n") Long no,Model model) {
 		model.addAttribute("n",no);
+		
+		SiteVo now = adminService.find();
+		model.addAttribute("siteVo",now);
+		
 		
 		return "guestbook/delete";
 	}

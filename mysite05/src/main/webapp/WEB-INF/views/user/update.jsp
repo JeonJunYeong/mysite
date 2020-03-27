@@ -13,7 +13,9 @@
 </head>
 <body>
 	<div id="container">
-		<c:import url="/WEB-INF/views/includes/header.jsp"/>
+		<c:import url="/WEB-INF/views/includes/header.jsp">
+			<c:param name="title" value="${siteVo.title }"></c:param>
+		</c:import>
 		<div id="content">
 			<div id="user">
 				<form id="update-form" name="updateform" method="post" action="${pageContext.request.contextPath }/user/update">

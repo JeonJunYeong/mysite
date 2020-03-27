@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.douzone.mysite.service.AdminService;
 import com.douzone.mysite.service.UserService;
+import com.douzone.mysite.vo.SiteVo;
 import com.douzone.mysite.vo.UserVo;
 import com.douzone.security.Auth;
 import com.douzone.security.AuthUser;
@@ -26,8 +28,15 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private AdminService adminService;
+	
 	@RequestMapping(value="/join",method=RequestMethod.GET)
-	public String join(@ModelAttribute UserVo vo) {
+	public String join(@ModelAttribute UserVo vo,Model model) {
+		
+		SiteVo now = adminService.find();
+		model.addAttribute("siteVo",now);
+		
 		return "user/join";
 	}
 	
@@ -55,7 +64,10 @@ public class UserController {
 	
 	
 	@RequestMapping(value="/login",method=RequestMethod.GET)
-	public String login() {
+	public String login(Model model) {
+		
+		SiteVo now = adminService.find();
+		model.addAttribute("siteVo",now);
 		
 		return "user/login";
 	}
@@ -96,6 +108,10 @@ public class UserController {
 		Long no = authUser.getNo();
 		UserVo vo = userService.getUser(no);
 		model.addAttribute("userVo", vo);
+		
+		SiteVo now = adminService.find();
+		model.addAttribute("siteVo",now);
+		
 		return "user/update";
 	}
 	
