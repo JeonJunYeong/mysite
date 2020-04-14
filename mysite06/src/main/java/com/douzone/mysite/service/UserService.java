@@ -37,5 +37,11 @@ public class UserService {
 		
 		return count ==1;
 	}
+
+	public boolean existUser(String email) {
+		
+		return userRepository.find(email) != null;
+	}
+	
 	
 }

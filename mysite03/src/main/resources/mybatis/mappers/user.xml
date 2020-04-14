@@ -4,7 +4,7 @@
 <mapper namespace="user">
 	<insert id="insert" parameterType ="uservo">
 		<![CDATA[
-		insert 
+		insert <
 			into user 
 		values(null,#{name },#{email },#{password },#{gender },now(),"USER")
 		]]>
@@ -60,4 +60,14 @@
 		where no = #{no }
 		]]>	
 	</select>
+	
+	<select id="findByEmail" parameterType="string" resultType="uservo">
+		<![CDATA[
+			select no
+				from user
+			where email=#{emial}
+		]]>
+	
+	</select>
+	
 </mapper>
