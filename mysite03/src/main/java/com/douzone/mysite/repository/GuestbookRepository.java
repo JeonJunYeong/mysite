@@ -23,15 +23,23 @@ public class GuestbookRepository {
 		
 		int count = sqlSession.insert("guestbook.insert",vo);
 		
-		boolean result = count ==1;
 		
-		return result;
+		return count ==1;
 	}
 
 	public List<GuestbookVo> findAll(){
 		List<GuestbookVo> list = sqlSession.selectList("guestbook.findAll");
 		return list;
 	}
+	
+	
+	public List<GuestbookVo> findAll(long startNo) {
+		
+		return sqlSession.selectList("guestbook.findAllByNo",startNo);
+		
+	}
+	
+	
 	
 	public boolean delete(Long no, String password) {
 		
@@ -45,6 +53,7 @@ public class GuestbookRepository {
 
 		return result;
 	}
+
 	
 	
 	
