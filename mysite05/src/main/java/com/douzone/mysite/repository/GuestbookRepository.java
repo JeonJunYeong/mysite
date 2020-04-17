@@ -33,6 +33,14 @@ public class GuestbookRepository {
 		return list;
 	}
 	
+
+	public List<GuestbookVo> findAll(long startNo) {
+		
+		return sqlSession.selectList("guestbook.findAllByNo",startNo);
+		
+	}
+	
+	
 	public boolean delete(Long no, String password) {
 		
 		Map<String, Object> map = new HashMap<>();
