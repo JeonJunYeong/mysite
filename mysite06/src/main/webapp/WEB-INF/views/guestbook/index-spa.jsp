@@ -216,7 +216,7 @@
 				return;
 			}
 
-			console.log(vo.name + "," + vo.password + "," + vo.contents);
+			
 			$.ajax({
 				url : '${pageContext.request.contextPath }/api/guestbook/add',
 				async : true,
@@ -231,8 +231,8 @@
 					}
 					// rendering
 					//render(response.data, true);
-					var html = listItempTemplate.render(response.data);
-					$("list-guestbook").prepend(html);
+					var html = listItemTemplate.render(response.data);
+					$("#list-guestbook").prepend(html);
 					
 					
 					// form reset

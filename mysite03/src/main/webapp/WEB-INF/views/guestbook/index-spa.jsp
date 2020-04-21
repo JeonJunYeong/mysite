@@ -62,6 +62,24 @@
 			close : callback
 		});
 	}
+	
+	var deleteBox = function(title, message, callback) {
+		$('#dialog-message p').text(message);
+		$('#dialog-message').attr('title', title).dialog({
+			modal : true,
+			buttons : {
+				"확인" : function() {
+					$(this).dialog("close");
+				},
+				"취소" : function() {
+					
+					$(this).dialog("close");
+				}
+			},
+			close : callback
+		});
+	}
+	
 
 	var render = function(vo, mode) {
 
@@ -216,7 +234,7 @@
 				return;
 			}
 
-			console.log(vo.name + "," + vo.password + "," + vo.contents);
+			
 			$.ajax({
 				url : '${pageContext.request.contextPath }/api/guestbook/add',
 				async : true,
@@ -231,8 +249,8 @@
 					}
 					// rendering
 					//render(response.data, true);
-					var html = listItempTemplate.render(response.data);
-					$("list-guestbook").prepend(html);
+					var html = listItemTemplate.render(response.data);
+					$("#list-guestbook").prepend(html);
 					
 					
 					// form reset
